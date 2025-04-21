@@ -104,10 +104,10 @@ jobs:
         AWS_USERNAME=$AWS_USERNAME
 
         aws eks create-access-entry --cluster-name $EKS_CLUSTER_NAME \
-          --principal-arn $AWS_USER_ARN" \
+          --principal-arn $AWS_USER_ARN \
           --type STANDARD --user $AWS_USERNAME \
           --kubernetes-groups Viewers \
-          --region "${{ secrets.AWS_REGION }}" 
+          --region ${{ secrets.AWS_REGION }} 
 
         aws eks associate-access-policy --cluster-name $EKS_CLUSTER_NAME \
           --region ${{ secrets.AWS_REGION }} \
