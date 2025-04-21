@@ -110,12 +110,8 @@ jobs:
 
       - name: Run multiple shell commands
         run: |
-          ENV=prod
-          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            ENV=dev
-          fi
           echo "Process TVT"
-          URL="https://${ENV}-api.quyennv.com/v1/ping"
+          URL="https://${{ github.event.inputs.env }}-api.quyennv.com/v1/ping"
           MAX_RETRIES=5
           DELAY=2
           attempt=0
