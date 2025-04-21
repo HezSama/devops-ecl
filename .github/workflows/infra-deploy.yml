@@ -96,20 +96,27 @@ jobs:
         echo "\n AWS_USER_ARN = $AWS_USER_ARN \
         \n AWS_USERNAME = $AWS_USERNAME \
         \n CLUSTER_NAME = $EKS_CLUSTER_NAME \
-        \n AWS_PROFILE = $awsprofile"
+        \n AWS_PROFILE = default"
 
     - name: Grant access  
-      run: 
-        aws eks create-access-entry --cluster-name $EKS_CLUSTER_NAME \
-        --principal-arn $AWS_USER_ARN \
-        --type STANDARD --user $AWS_USERNAME \
-        --kubernetes-groups Viewers \
-        --profile $awsprofile --region $AWS_REGION
+      run: |
+        AWS_USER_ARN=$AWS_USER_ARN
+        AWS_USERNAME=$AWS_USERNAME
+        AWS_PROFILE=default
+        echo "Cluster Name: $EKS_CLUSTER_NAME"
+        echo "Principal ARN: $AWS_USER_ARN"
+        echo "AWS Profile: $AWS_PROFILE"
+        echo "AWS Region: $AWS_REGION"
+        aws eks create-access-entry --cluster-name "$EKS_CLUSTER_NAME" \
+          --principal-arn "$AWS_USER_ARN" \
+          --type STANDARD --user "$AWS_USERNAME" \
+          --kubernetes-groups Viewers \
+          --profile "$AWS_PROFILE" --region "$AWS_REGION"
 
-        aws eks associate-access-policy --cluster-name $EKS_CLUSTER_NAME \
-        --profile $awsprofile --region $AWS_REGION \
-        --principal-arn $AWS_USER_ARN  --access-scope type=cluster \
-        --policy-arn arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
+        aws eks associate-access-policy --cluster-name "$EKS_CLUSTER_NAME" \
+          --profile "$AWS_PROFILE" --region "$AWS_REGION" \
+          --principal-arn "$AWS_USER_ARN" --access-scope type=cluster \
+          --policy-arn arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
       
     - name: Update kube config
       run: |
