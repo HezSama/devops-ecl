@@ -65,45 +65,59 @@ jobs:
         run: |
           terraform apply -auto-approve --var-file=envs/${{ github.event.inputs.env }}.tfvars
 
-# init-kubeconfig:
-#   name: Init kubeconfig
-#   needs: terraform
-#   runs-on: ubuntu-latest
+  init-kubeconfig:
+    name: Init kubeconfig
+    needs: terraform
+    runs-on: ubuntu-latest
 
-#   env:
-#     AWS_REGION: ${{ secrets.AWS_REGION }}
-#     EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
 
-#   steps: 
-#     - name: Checkout repository
-#       uses: actions/checkout@v3
+    steps: 
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-#     - name: Configure AWS credentials
-#       uses: aws-actions/configure-aws-credentials@v4
-#       with:
-#         role-to-assume: ${{ secrets.aws_rta }}
-#         aws-region: ${{ secrets.AWS_REGION }}
-#         role-session-name: cuongnvecl-github-svc-tf-provision-infra
-    
-#     - name: Grant access  
-#       run: 
-#         aws eks describe-access-entry \
-#         --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
-#         --region ${{ secrets.AWS_REGION }} \
-#         --principal-arn ${{ steps.identity.outputs.arn }} || \
-#         aws eks create-access-entry \
-#         --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
-#         --principal-arn ${{ steps.identity.outputs.arn }} \
-#         --region ${{ secrets.AWS_REGION }} \
-#         --type STANDARD \
-#         --user ${{ secrets.aws_rta }} \
-#         --kubernetes-group Viewers 
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.aws_rta }}
+        aws-region: ${{ secrets.AWS_REGION }}
+        role-session-name: cuongnvecl-github-svc-tf-provision-infra
+    - name: Get AWS user identity
+      id: identity
+      run: |
+        AWS_USER_ARN=$(aws sts get-caller-identity --profile $awsprofile | jq -r '.Arn')
+        AWS_USERNAME=$(echo "$AWS_USER_ARN" | sed 's|.*/||')
+        TYPE_ACCESS=cluster
+        POLICY_ARN=arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
 
-#         aws eks associate-access-policy \
-#         --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
-#         --region ${{ secrets.AWS_REGION }} \  
-#         --principal-arn ${{ steps.identity.outputs.arn }} \
-#         --policy-arn arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy 
+        echo "Configurations"
+        echo "\n AWS_USER_ARN = $AWS_USER_ARN \
+        \n AWS_USERNAME = $AWS_USERNAME \
+        \n CLUSTER_NAME = $eksclustername \
+        \n AWS_PROFILE = $awsprofile"
+
+    - name: Grant access  
+      run: 
+        aws eks create-access-entry --cluster-name $eksclustername \
+        --principal-arn $AWS_USER_ARN  \
+        --type STANDARD --user $AWS_USERNAME \
+        --kubernetes-groups Viewers \
+        --profile $awsprofile --region $awsregion
+
+        aws eks associate-access-policy --cluster-name $eksclustername \
+        --profile $awsprofile --region $awsregion \
+        --principal-arn $AWS_USER_ARN  --access-scope type=cluster \
+        --policy-arn arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
+      
+    - name: Update kube config
+      run: |
+        aws eks update-kubeconfig --region $awsregion --profile $awsprofile --name $eksclustername
+
+        echo "Verifying the eks cluster"
+        kubectl config current-context | grep $eksclustername  | wc -l
+        kubectl get namespace -A
 
 
 
