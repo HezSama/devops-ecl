@@ -73,8 +73,8 @@ jobs:
         if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
           ENV=dev
         fi
-        echo "current env deploy: ${ENV}"
-        sed -i "s|ENV|${ENV}|g" app.api/k8s/manifest.yaml
+        echo "current env deploy: ${{ github.event.inputs.env }}"
+        sed -i "s|ENV|${env.ENV}|g" app.api/k8s/manifest.yaml
         sed -i "s|CONTAINER_REGISTRY_BASE_URI|vblue1594/max-weather:${{ github.sha }}|g" app.api/k8s/manifest.yaml
 
         echo "viewing the manifest"
@@ -89,7 +89,7 @@ jobs:
             --docker-password=${{ secrets.DOCKERHUB_TOKEN }} \
             --docker-email=${{ secrets.DOCKERHUB_EMAIL }} \
             -n max-weather-${{ github.event.inputs.env }} || echo "Secret already exists"
-            
+
   tvt:
     needs: deploy
     runs-on: ubuntu-latest
