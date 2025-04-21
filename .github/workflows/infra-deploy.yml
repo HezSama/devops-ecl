@@ -71,6 +71,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      ENV: ${{ github.event.inputs.env }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
       EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
 
@@ -100,8 +101,8 @@ jobs:
 
     - name: Grant access  
       run: |
-        AWS_USER_ARN=$AWS_USER_ARN
-        AWS_USERNAME=$AWS_USERNAME
+        AWS_USER_ARN= $AWS_USER_ARN
+        AWS_USERNAME= $AWS_USERNAME
 
         aws eks create-access-entry --cluster-name $EKS_CLUSTER_NAME \
           --principal-arn $AWS_USER_ARN \
