@@ -23,6 +23,7 @@ permissions:
 
 jobs:
   terraform:
+    name: Provision Infrastructure by Terraform
     runs-on: ubuntu-latest
 
     defaults:
@@ -63,4 +64,48 @@ jobs:
       - name: Terraform Apply depends on env
         run: |
           terraform apply -auto-approve --var-file=envs/${{ github.event.inputs.env }}.tfvars
+
+# init-kubeconfig:
+#   name: Init kubeconfig
+#   needs: terraform
+#   runs-on: ubuntu-latest
+
+#   env:
+#     AWS_REGION: ${{ secrets.AWS_REGION }}
+#     EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
+
+#   steps: 
+#     - name: Checkout repository
+#       uses: actions/checkout@v3
+
+#     - name: Configure AWS credentials
+#       uses: aws-actions/configure-aws-credentials@v4
+#       with:
+#         role-to-assume: ${{ secrets.aws_rta }}
+#         aws-region: ${{ secrets.AWS_REGION }}
+#         role-session-name: cuongnvecl-github-svc-tf-provision-infra
+    
+#     - name: Grant access  
+#       run: 
+#         aws eks describe-access-entry \
+#         --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
+#         --region ${{ secrets.AWS_REGION }} \
+#         --principal-arn ${{ steps.identity.outputs.arn }} || \
+#         aws eks create-access-entry \
+#         --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
+#         --principal-arn ${{ steps.identity.outputs.arn }} \
+#         --region ${{ secrets.AWS_REGION }} \
+#         --type STANDARD \
+#         --user ${{ secrets.aws_rta }} \
+#         --kubernetes-group Viewers 
+
+#         aws eks associate-access-policy \
+#         --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
+#         --region ${{ secrets.AWS_REGION }} \  
+#         --principal-arn ${{ steps.identity.outputs.arn }} \
+#         --policy-arn arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy 
+
+
+
+
         

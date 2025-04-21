@@ -23,8 +23,8 @@ eks_config = {
   endpoint_public_access                         = true
   aws_auth_users = [
     {
-      userarn  = "arn:aws:iam::376129850044:user/DE000065"
-      username = "DE000065"
+      userarn  = "arn:aws:iam::376129850044:user/eks-ops"
+      username = "eks-ops"
       groups   = ["system:masters"]
     },
     {
@@ -56,8 +56,7 @@ bastion_definition = {
     bastion_instance_class      = "t2.micro"
     bastion_monitoring          = true
     bastion_name                = "bastion"
-    bastion_public_key          = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE7+kQf52ksiK+sD1AN8/1yHNNMfKMtJGCG+MWw2pdIV computer@DESKTOP-MV0MPNL
-    bastion_ec2UserConnect      = "ec2-user"
+    bastion_public_key          = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFH50h4fgSzI6aDLMcWbaH1Q0xlWsf6g7pmSKK9ZJAGf computer@DESKTOP-MV0MPNL"
     trusted_ips                 = ["1.55.68.185/32"]
     user_data_base64            = null
     ext-tags = {
