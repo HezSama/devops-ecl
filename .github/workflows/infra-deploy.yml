@@ -51,26 +51,12 @@ jobs:
           cli_version: v1.11.3
 
       - name: Terraform Init
-        run: terraform init -backend-config="key=github_ci/infra/${{ github.ref_name }}-provisionecl1.tfstate"
+        run: terraform init -backend-config="key=github_ci/infra/${{ github.ref_name }}-provisionecl1.tfstate -reconfigure"
         
 
 
-      - name: Terraform Plan for dev env
-        if: github.event_name == 'push' && github.ref == 'refs/heads/dev'      
-        run: terraform plan --var-file=envs/dev.tfvars
-        
-      
-      - name: Terraform Plan for prod env
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
-        run: terraform plan --var-file=envs/main.tfvars
-        
-
-      - name: Terraform Apply for Prod ENV
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
-        run: terraform apply -auto-approve --var-file=envs/main.tfvars
-        
-
-      - name: Terraform Apply for Prod dev
-        if: github.event_name == 'push' && github.ref == 'refs/heads/dev' 
-        run: terraform apply -auto-approve --var-file=envs/dev.tfvars
+      - name: Terraform Plan depends on env
+        run: |
+          terraform workspace select ${{ github.event.inputs.env }} || terraform workspace new ${{ github.event.inputs.env }}
+          terraform plan --var-file=envs/${{ github.event.inputs.env }}.tfvars
         
