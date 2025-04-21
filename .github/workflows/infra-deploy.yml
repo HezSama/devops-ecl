@@ -12,7 +12,7 @@ on:
           - prod
     
 env:
-  name: ${{ github.event.inputs.env }}
+  ENV: ${{ github.event.inputs.env }}
     
    
     
