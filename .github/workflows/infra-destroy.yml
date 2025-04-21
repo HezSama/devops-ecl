@@ -2,11 +2,15 @@ name: Terraform Destroy
 
 on:
   workflow_dispatch:
-    inputs: 
-      confirmation: 
-        description: 'Type "Confirm" to destroy all the terraform infrastructure resources'
-        required: true 
-        default: '' 
+    inputs:
+      env:
+        description: 'Environment to destroy to'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
 
 permissions:
   id-token: write
