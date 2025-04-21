@@ -101,7 +101,6 @@ jobs:
       run: |
         AWS_USER_ARN=$AWS_USER_ARN
         AWS_USERNAME=$AWS_USERNAME
-        AWS_PROFILE=default
         echo "Cluster Name: $EKS_CLUSTER_NAME"
         echo "Principal ARN: $AWS_USER_ARN"
         echo "AWS Profile: $AWS_PROFILE"
