@@ -1,0 +1,62 @@
+name: provision infrastructure
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+    
+permissions:
+  contents: read
+  id-token: write 
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 
+        uses: actions/checkout@v4
+
+      - name: Configuration the AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+      
+        with:
+          role-to-assume: ${{ secrets.aws_rta }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: cuongnvecl-github-svc-tf-provision-infra
+
+      - name: list the directory failed
+        run: |
+          ls -la -R /home/runner/work/devops-ecl/devops-ecl/app.tf
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          cli_version: v1.11.3
+
+      - name: Terraform Init
+        run: terraform init -backend-config="key=github_ci/infra/${{ github.ref_name }}-provisionecl1.tfstate"
+        
+
+
+      - name: Terraform Plan for dev env
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev'      
+        run: terraform plan --var-file=envs/dev.tfvars
+        
+      
+      - name: Terraform Plan for prod env
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
+        run: terraform plan --var-file=envs/main.tfvars
+        
+
+      - name: Terraform Apply for Prod ENV
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
+        run: terraform apply -auto-approve --var-file=envs/main.tfvars
+        
+
+      - name: Terraform Apply for Prod dev
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev' 
+        run: terraform apply -auto-approve --var-file=envs/dev.tfvars
+        
