@@ -55,12 +55,12 @@ jobs:
           terraform workspace select ${{ github.event.inputs.env }} 
           terraform plan -destroy --var-file=envs/${{ github.event.inputs.env }}.tfvars
        
-      # - name: Terraform destroy depends on env and confirmation
-      #   if: github.event.inputs.confirmation == 'Confirm' && github.event.inputs.env == 'dev'
-      #   run: |
-      #     terraform workspace select ${{ github.event.inputs.env }} 
-      #     terraform destroy -auto-approve --var-file=envs/${{ github.event.inputs.env }}.tfvars
-      #     terraform workspace delete ${{ github.event.inputs.env }}
+      - name: Terraform destroy depends on env and confirmation
+        if: github.event.inputs.confirmation == 'Confirm' && github.event.inputs.env == 'dev'
+        run: |
+          terraform workspace select ${{ github.event.inputs.env }} 
+          terraform destroy -auto-approve --var-file=envs/${{ github.event.inputs.env }}.tfvars
+          terraform workspace delete ${{ github.event.inputs.env }}
     
 
       - name: Check Confirmation 

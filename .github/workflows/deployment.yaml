@@ -89,6 +89,7 @@ jobs:
             --docker-password=${{ secrets.DOCKERHUB_TOKEN }} \
             --docker-email=${{ secrets.DOCKERHUB_EMAIL }} \
             -n max-weather-${{ github.event.inputs.env }} || echo "Secret already exists"
+            
   tvt:
     needs: deploy
     runs-on: ubuntu-latest
