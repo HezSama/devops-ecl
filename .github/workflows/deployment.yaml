@@ -1,10 +1,19 @@
 name: Build, Push and Deploy to Kubernetes
 
 on:
-  push:
-    branches:
-      - dev 
-      - main # Trigger action on pushes to main branch
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Deploy app to EKS'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
+
+env:
+  ENV: ${{ github.event.inputs.env }}
 
 permissions:
   contents: read
@@ -71,7 +80,15 @@ jobs:
         echo "viewing the manifest"
         cat app.api/k8s/manifest.yaml
         kubectl apply -f app.api/k8s/manifest.yaml
-        kubectl rollout status deployment/app-api -n max-weather-${ENV}
+        kubectl rollout status deployment/app-api -n max-weather-${{ github.event.inputs.env }}
+    - name: Create docker secrets for private repo
+      run: |
+          kubectl create secret docker-registry regcred \
+            --docker-server=https://index.docker.io/v1/ \
+            --docker-username=${{ secrets.DOCKERHUB_USERNAME }} \
+            --docker-password=${{ secrets.DOCKERHUB_TOKEN }} \
+            --docker-email=${{ secrets.DOCKERHUB_EMAIL }} \
+            -n max-weather-${{ github.event.inputs.env }} || echo "Secret already exists"
   tvt:
     needs: deploy
     runs-on: ubuntu-latest
