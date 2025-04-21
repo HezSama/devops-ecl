@@ -60,6 +60,7 @@ jobs:
         run: |
           terraform workspace select ${{ github.event.inputs.env }} 
           terraform destroy -auto-approve --var-file=envs/${{ github.event.inputs.env }}.tfvars
+          terraform workspace select default
           terraform workspace delete ${{ github.event.inputs.env }}
     
 
