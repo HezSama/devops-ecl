@@ -1,4 +1,4 @@
-name: k8s deployment
+name: App deployment
 
 on:
   workflow_dispatch:
@@ -74,7 +74,7 @@ jobs:
 
         echo "viewing the manifest"
         cat app.api/k8s/manifest.yaml
-        kubectl apply -f app.api/k8s/manifest.yaml --validate=false
+        kubectl apply -f app.api/k8s/manifest.yaml 
         kubectl rollout status deployment/app-api -n max-weather-${{ github.event.inputs.env }}
 
     - name: Create docker secrets for private repo
