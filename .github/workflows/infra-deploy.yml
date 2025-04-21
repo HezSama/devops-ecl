@@ -90,7 +90,7 @@ jobs:
       run: |
         ARN=$(aws sts get-caller-identity --query Arn --output text)
         echo "arn=$ARN" >> $GITHUB_OUTPUT
-        echo "username=$(echo $ARN | awk -F'/' '{print $NF}')" >> $GITHUB_OUTPUT
+        echo "\n username=$(echo $ARN | awk -F'/' '{print $NF}')" >> $GITHUB_OUTPUT
         TYPE_ACCESS=cluster
         POLICY_ARN=arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
 
