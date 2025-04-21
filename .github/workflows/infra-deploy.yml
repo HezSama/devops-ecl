@@ -88,9 +88,8 @@ jobs:
     - name: Get AWS user identity
       id: identity
       run: |
-        ARN=$(aws sts get-caller-identity --query Arn --output text)
-        echo "arn=$ARN" >> $GITHUB_OUTPUT
-        echo "\nusername=$(echo $ARN | awk -F'/' '{print $NF}')" >> $GITHUB_OUTPUT
+        account_id=$(aws sts get-caller-identity --query "Account" --output text)
+        oidc_provider=$(aws eks describe-cluster --name my-cluster --region $AWS_REGION --query "cluster.identity.oidc.issuer" --output text | sed -e "s/^https:\/\///")
         TYPE_ACCESS=cluster
         POLICY_ARN=arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
 
@@ -98,14 +97,14 @@ jobs:
     - name: Grant access  
       run: |
         aws eks create-access-entry --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
-          --principal-arn ${{ steps.identity.outputs.arn }} \
-          --type STANDARD --user ${{ steps.identity.outputs.username }}\
+          --principal-arn ${{ steps.identity.outputs.account_id }} \
+          --type STANDARD \
           --kubernetes-groups Viewers \
           --region ${{ secrets.AWS_REGION }} 
 
         aws eks associate-access-policy --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
           --region ${{ secrets.AWS_REGION }} \
-          --principal-arn ${{ steps.identity.outputs.arn }} --access-scope type=cluster \
+          --principal-arn ${{ steps.identity.outputs.account_id }} --access-scope type=cluster \
           --policy-arn arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
       
     - name: Update kube config
