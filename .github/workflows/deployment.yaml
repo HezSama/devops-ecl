@@ -1,4 +1,4 @@
-name: Build, Push and Deploy to Kubernetes
+name: k8s deployment
 
 on:
   workflow_dispatch:
@@ -76,6 +76,7 @@ jobs:
         cat app.api/k8s/manifest.yaml
         kubectl apply -f app.api/k8s/manifest.yaml
         kubectl rollout status deployment/app-api -n max-weather-${{ github.event.inputs.env }}
+        
     - name: Create docker secrets for private repo
       run: |
           kubectl create secret docker-registry regcred \
