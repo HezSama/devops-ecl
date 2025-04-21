@@ -71,14 +71,14 @@ jobs:
       run: |
         kubectl get ns max-weather-${{ github.event.inputs.env }} || kubectl create ns max-weather-${{ github.event.inputs.env }}
 
-    - name: install cert-manager
-      run: |
-        helm repo add jetstack https://charts.jetstack.io
-        helm repo update
-        kubectl create namespace cert-manager || echo "cert-manager namespace already exists"
-        helm install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.11.0 --set installCRDs=true || echo "cert-manager already installed"
+    # - name: install cert-manager
+    #   run: |
+    #     helm repo add jetstack https://charts.jetstack.io
+    #     helm repo update
+    #     kubectl create namespace cert-manager || echo "cert-manager namespace already exists"
+    #     helm install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.11.0 --set installCRDs=true || echo "cert-manager already installed"
 
-        kubectl get pod -n cert-manager
+    #     kubectl get pod -n cert-manager
 
     
         

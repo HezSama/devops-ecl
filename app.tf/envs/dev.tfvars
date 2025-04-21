@@ -23,14 +23,14 @@ eks_config = {
   endpoint_public_access                         = true
   aws_auth_users = [
     {
-      userarn  = "arn:aws:iam::376129850044:user/eks-ops"
-      username = "eks-ops"
+      userarn  = "arn:aws:iam::376129850044:user/DE000065"
+      username = "DE000065"
       groups   = ["system:masters"]
     },
     {
-      userarn  = "arn:aws:iam::376129850044:user/devops"
-      username = "devops"
-      groups   = ["system:masters"]
+      # userarn  = "arn:aws:iam::376129850044:user/devops"
+      # username = "devops"
+      # groups   = ["system:masters"]
     },
   ]
   cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"],
