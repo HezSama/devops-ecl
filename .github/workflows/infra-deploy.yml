@@ -89,7 +89,7 @@ jobs:
       id: identity
       run: |
         account_id=$(aws sts get-caller-identity --query "Account" --output text)
-        oidc_provider=$(aws eks describe-cluster --name my-cluster --region $AWS_REGION --query "cluster.identity.oidc.issuer" --output text | sed -e "s/^https:\/\///")
+        oidc_provider=$(aws eks describe-cluster --name $EKS_CLUSTER_NAME --region $AWS_REGION --query "cluster.identity.oidc.issuer" --output text | sed -e "s/^https:\/\///")
         TYPE_ACCESS=cluster
         POLICY_ARN=arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
 
@@ -99,6 +99,7 @@ jobs:
         aws eks create-access-entry --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
           --principal-arn ${{ steps.identity.outputs.account_id }} \
           --type STANDARD \
+          --role ${{ steps.identity.outputs.oidc_provider }} \
           --kubernetes-groups Viewers \
           --region ${{ secrets.AWS_REGION }} 
 
