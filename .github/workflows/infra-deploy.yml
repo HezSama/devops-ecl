@@ -59,4 +59,8 @@ jobs:
         run: |
           terraform workspace select ${{ github.event.inputs.env }} || terraform workspace new ${{ github.event.inputs.env }}
           terraform plan --var-file=envs/${{ github.event.inputs.env }}.tfvars
+
+      # - name: Terraform Apply depends on env
+      #   run: |
+      #     terraform apply -auto-approve --var-file=envs/${{ github.event.inputs.env }}.tfvars
         
