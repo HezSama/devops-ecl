@@ -1,4 +1,4 @@
-name: provision infrastructure
+name: Provision Infrastructure by Terraform
 on:
   workflow_dispatch:
     inputs:
