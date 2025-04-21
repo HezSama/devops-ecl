@@ -101,7 +101,7 @@ jobs:
     - name: Grant access  
       run: 
         aws eks create-access-entry --cluster-name $EKS_CLUSTER_NAME \
-        --principal-arn $AWS_USER_ARN  \
+        --principal-arn $AWS_USER_ARN \
         --type STANDARD --user $AWS_USERNAME \
         --kubernetes-groups Viewers \
         --profile $awsprofile --region $AWS_REGION
@@ -113,7 +113,7 @@ jobs:
       
     - name: Update kube config
       run: |
-        aws eks update-kubeconfig --region $AWS_REGION --profile $awsprofile --name $EKS_CLUSTER_NAME
+        aws eks update-kubeconfig --region $AWS_REGION --profile default --name $EKS_CLUSTER_NAME
 
         echo "Verifying the eks cluster"
         kubectl config current-context | grep $EKS_CLUSTER_NAME  | wc -l
