@@ -11,6 +11,10 @@ on:
         options:
           - dev
           - prod
+      confirmation:
+        description: 'Type "Confirm" to destroy all the terraform infrastructure resources'
+        required: true 
+        default: ''
 
 permissions:
   id-token: write
@@ -46,7 +50,7 @@ jobs:
         run: terraform init -backend-config="key=github_ci/infra/${{ github.ref_name }}-provisionecl1.tfstate -reconfigure"
 
       - name: Terraform Plan destroy depends on env and confirmation
-        if: ${{ inputs.confirmation == 'Confirm' }} && github.event.inputs.env == 'dev'
+        if: github.event.inputs.confirmation == 'Confirm' && github.event.inputs.env == 'dev'
         run: |
           terraform workspace select ${{ github.event.inputs.env }} 
           terraform plan -destroy --var-file=envs/${{ github.event.inputs.env }}.tfvars
