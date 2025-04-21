@@ -102,10 +102,7 @@ jobs:
       run: |
         AWS_USER_ARN=$AWS_USER_ARN
         AWS_USERNAME=$AWS_USERNAME
-        echo "Cluster Name: $EKS_CLUSTER_NAME"
-        echo "Principal ARN: $AWS_USER_ARN"
-        echo "AWS Profile: $AWS_PROFILE"
-        echo "AWS Region: ${{ secrets.AWS_REGION }}"
+
         aws eks create-access-entry --cluster-name $EKS_CLUSTER_NAME \
           --principal-arn $AWS_USER_ARN" \
           --type STANDARD --user $AWS_USERNAME \
