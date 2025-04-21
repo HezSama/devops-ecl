@@ -98,14 +98,14 @@ jobs:
     - name: Grant access  
       run: |
         aws eks create-access-entry --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
-          --principal-arn ${{ steps.identity.outputs.arn }} \
-          --type STANDARD --user ${{ steps.identity.outputs.username }}\
+          --principal-arn ${{ secrets.AWS_ARN }} \
+          --type STANDARD --user ${{ secrest.AWS_USERNAME }}\
           --kubernetes-groups Viewers \
           --region ${{ secrets.AWS_REGION }} 
 
         aws eks associate-access-policy --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
           --region ${{ secrets.AWS_REGION }} \
-          --principal-arn ${{ steps.identity.outputs.arn }} --access-scope type=cluster \
+          --principal-arn ${{ secrets.AWS_ARN }} --access-scope type=cluster \
           --policy-arn arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
       
     - name: Update kube config
