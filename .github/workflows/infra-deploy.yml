@@ -87,7 +87,7 @@ jobs:
     - name: Get AWS user identity
       id: identity
       run: |
-        awsprofile=cuongnvecl
+        awsprofile="cuongnvecl"
         AWS_USER_ARN=$(aws sts get-caller-identity --profile $awsprofile | jq -r '.Arn')
         AWS_USERNAME=$(echo "$AWS_USER_ARN" | sed 's|.*/||')
         TYPE_ACCESS=cluster
