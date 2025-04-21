@@ -101,7 +101,7 @@ jobs:
 
     - name: Grant access  
       run: 
-        awsregion=${{ secrets.AWS_REGION }}
+        awsregion="ap-southeast-2"
         aws eks create-access-entry --cluster-name $eksclustername \
         --principal-arn $AWS_USER_ARN  \
         --type STANDARD --user $AWS_USERNAME \
