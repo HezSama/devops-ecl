@@ -94,26 +94,26 @@ def home():
         }
     })
 
-# @cross_origin()
-# @app.route("/health", methods=["GET"])
-# def health_check():
-#     try:
-#         uptime = time.time() - START_TIME
-#         return jsonify({
-#             "status": "ok",
-#             "uptime_seconds": round(uptime, 2),
-#             "version": "1.0",
-#             "details": {
-#                 "database_status": "connected",
-#                 "api_ready": True
-#             }
-#         }), 200
-#     except Exception as e:
-#         logger.error(f"Health check failed: {str(e)}")
-#         return jsonify({
-#             "status": "error",
-#             "error": str(e)
-#         }), 500
+@cross_origin()
+@app.route("/health", methods=["GET"])
+def health_check():
+    try:
+        uptime = time.time() - START_TIME
+        return jsonify({
+            "status": "ok",
+            "uptime_seconds": round(uptime, 2),
+            "version": "1.0",
+            "details": {
+                "database_status": "connected",
+                "api_ready": True
+            }
+        }), 200
+    except Exception as e:
+        logger.error(f"Health check failed: {str(e)}")
+        return jsonify({
+            "status": "error",
+            "error": str(e)
+        }), 500
 
 @cross_origin
 @ app.route("/v1/resources", methods=["GET"])
