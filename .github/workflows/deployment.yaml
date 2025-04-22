@@ -120,9 +120,9 @@ jobs:
         kubectl apply -f app.api/k8s/ingress.yaml --timeout=120s
 
         #Verify Pod status
-        kubectl get pods -n max-weather-${{ github.event.inputs.env }} --timeout=120s
-        #kubectl logs -n max-weather-${{ github.event.inputs.env }} <pod-name> --timeout=120s
-        kubectl get endpoints -n max-weather-${{ github.event.inputs.env }} svc-backend-api --timeout=120s
+        kubectl get pods -n max-weather-${{ github.event.inputs.env }} 
+        #kubectl logs -n max-weather-${{ github.event.inputs.env }} <pod-name> 
+        kubectl get endpoints -n max-weather-${{ github.event.inputs.env }} svc-backend-api 
         
         #Verify Certificate status
         kubectl describe certificate -n max-weather-${{ github.event.inputs.env }} app-tls-cert
