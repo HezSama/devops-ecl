@@ -90,6 +90,7 @@ jobs:
       run: |
         PRINCIPAL_ARN=$(aws sts get-caller-identity --query Arn --output text)
         echo "principal_arn=$PRINCIPAL_ARN" >> $GITHUB_OUTPUT
+        echo "$PRINCIPAL_ARN" >> arn-output.txt
         TYPE_ACCESS=cluster
         POLICY_ARN=arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
 
