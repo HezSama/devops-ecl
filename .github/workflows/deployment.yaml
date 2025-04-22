@@ -121,7 +121,7 @@ jobs:
         
     
 
-        kubectl rollout status deployment/app-api -n max-weather-${{ github.event.inputs.env }} --timeout=120s ||\
+        kubectl rollout status deployment/app-api -n max-weather-${{ github.event.inputs.env }} --timeout=300s ||\
         echo "Applying the manifest timeout"
 
     - name: Create docker secrets for private repo
