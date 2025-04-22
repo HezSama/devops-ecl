@@ -1,0 +1,43 @@
+name: Environment Verify
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
+
+env:
+  ENV: ${{ github.event.inputs.env }}
+
+permissions:
+  contents: read
+  id-token: write
+
+
+jobs:
+  verify:
+    name: Verify Environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.aws_rta }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: cuongnvecl-github-svc-tf-provision-infra  
+
+      - name: Verify alp on AWS
+        run: |
+          aws ec2 describe-network-interfaces --network-interface-ids eni-0da59a2858ba2d178 --query 'NetworkInterfaces[].RequesterId' >> $GITHUB_OUTPUT
+
+          
