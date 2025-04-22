@@ -108,21 +108,19 @@ jobs:
         
         sed -i "s|CONTAINER_REGISTRY_BASE_URI|vblue1594/max-weather:${{ github.sha }}|g" app.api/k8s/deployment.yaml
 
-        echo "viewing the manifest"
-        cat app.api/k8s/deployment.yaml
-        cat app.api/k8s/certificate.yaml
-        cat app.api/k8s/services.yaml
-        cat app.api/k8s/ingress.yaml
-
         kubectl apply -f app.api/k8s/deployment.yaml --timeout=120s
         kubectl apply -f app.api/k8s/certificate.yaml --timeout=120s
         kubectl apply -f app.api/k8s/services.yaml --timeout=120s
         kubectl apply -f app.api/k8s/ingress.yaml --timeout=120s
 
-        #Verify Pod status
+        echo "Verify Pod Status"
+        echo "kubectl get pods -n max-weather-${{ github.event.inputs.env }}"
         kubectl get pods -n max-weather-${{ github.event.inputs.env }} 
-        #kubectl logs -n max-weather-${{ github.event.inputs.env }} <pod-name> 
-        kubectl get endpoints -n max-weather-${{ github.event.inputs.env }} svc-backend-api 
+
+        echo "kubectl logs -n max-weather-${{ github.event.inputs.env }} <pod-name>"
+
+        echo "kubectl get endpoints -n max-weather-${{ github.event.inputs.env }} svc-backend-api"
+        kubectl get endpoints -n max-weather-${{ github.event.inputs.env }} svc-backend-api
         
         #Verify Certificate status
         kubectl describe certificate -n max-weather-${{ github.event.inputs.env }} app-tls-cert
@@ -132,7 +130,7 @@ jobs:
 
     - name: Create docker secrets for private repo
       run: |
-          kubectl create secret docker-registry regcred \
+          kubectl create secret docker-registry app-api-ecl-vblue1594 \
             --docker-server=https://index.docker.io/v1/ \
             --docker-username=${{ secrets.DOCKERHUB_USERNAME }} \
             --docker-password=${{ secrets.DOCKERHUB_TOKEN }} \
