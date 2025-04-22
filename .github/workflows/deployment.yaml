@@ -95,8 +95,8 @@ jobs:
     - name: Verify NGINX-Controller
       run: |
         kubectl wait --for=condition=ready \
-        --timeout=20s -n ingress-nginx pod -l app.kubernetes.io/name=ingress-nginx
-        
+        --timeout=60s -n ingress-nginx pod -l app.kubernetes.io/name=ingress-nginx
+
         kubectl get service ingress-nginx -n ingress-nginx
 
     - name: Apply Kubernetes manifest
@@ -106,7 +106,7 @@ jobs:
 
         echo "viewing the manifest"
         cat app.api/k8s/manifest.yaml
-        kubectl apply -f app.api/k8s/manifest.yaml 
+        kubectl apply -f app.api/k8s/manifest.yaml --timeout=120s
         kubectl rollout status deployment/app-api -n max-weather-${{ github.event.inputs.env }}
 
     - name: Create docker secrets for private repo
