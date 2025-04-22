@@ -43,8 +43,7 @@ jobs:
 
           OUTPUT=$( aws sts get-caller-identity --output text )
           echo "output=$OUTPUT" >> $GITHUB_OUTPUT
-          aws ec2 detach-network-interface --attachment-id eni-0caa6425518a55cc2 --force
-          aws ec2 detach-network-interface --attachment-id eni-0c368dfd3e5820c66 --force
+          aws ec2 detach-network-interface --attachment-id eni-attach-00025b5b469ca696e --force --region ap-northeast-2
 
       # - name: Verify Pod Status
       #   run: |
