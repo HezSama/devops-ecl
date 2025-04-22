@@ -98,7 +98,7 @@ jobs:
       run: |
         aws eks create-access-entry \
             --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
-            --principal-arn "{{ steps.identity.outputs.principal_arn }} \
+            --principal-arn {{ steps.identity.outputs.principal_arn }} \
             --kubernetes-groups Viewers \
             --region ${{ secrets.AWS_REGION }}
 
