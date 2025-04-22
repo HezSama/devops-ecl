@@ -60,4 +60,4 @@ spec:
   issuerRef:
     group: cert-manager.k8s.cloudflare.com
     kind: OriginIssuer
-    name: prod-issuer              
+    name: prod-issuer

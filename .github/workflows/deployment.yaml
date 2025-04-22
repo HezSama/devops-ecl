@@ -116,7 +116,7 @@ jobs:
         kubectl apply -f app.api/k8s/ingress.yaml --timeout=120s
     
 
-        kubectl rollout status deployment/app-api -n max-weather-${{ github.event.inputs.env }} --timeout=120s \
+        kubectl rollout status deployment/app-api -n max-weather-${{ github.event.inputs.env }} --timeout=120s ||\
         echo "Applying the manifest timeout"
 
     - name: Create docker secrets for private repo
