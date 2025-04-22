@@ -113,10 +113,10 @@ jobs:
         cat app.api/k8s/services.yaml
         cat app.api/k8s/ingress.yaml
 
-        kubectl apply -f app.api/k8s/certificate.yaml \
-        app.api/k8s/deployment.yaml \
-        app.api/k8s/services.yaml \
-        app.api/k8s/ingress.yaml --timeout=120s
+        kubectl apply -f app.api/k8s/certificate.yaml --timeout=120s
+        kubectl apply -f app.api/k8s/deployment.yaml --timeout=120s
+        kubectl apply -f app.api/k8s/services.yaml --timeout=120s
+        kubectl apply -f app.api/k8s/ingress.yaml --timeout=120s
     
 
         kubectl rollout status deployment/app-api -n max-weather-${{ github.event.inputs.env }}
