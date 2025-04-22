@@ -13,7 +13,7 @@ terraform {
 }
 
 provider "aws" {
-  region  = "ap-southeast-2" # switch other ap-southeast-1 or
+  region  = "ap-northeast-2" # switch other ap-southeast-1 or
   #profile = "default"
 }
 
