@@ -118,8 +118,14 @@ jobs:
         kubectl apply -f app.api/k8s/certificate.yaml --timeout=120s
         kubectl apply -f app.api/k8s/services.yaml --timeout=120s
         kubectl apply -f app.api/k8s/ingress.yaml --timeout=120s
+
+        #Verify Pod status
+        kubectl get pods -n max-weather-${{ github.event.inputs.env }} --timeout=120s
+        #kubectl logs -n max-weather-${{ github.event.inputs.env }} <pod-name> --timeout=120s
+        kubectl get endpoints -n max-weather-${{ github.event.inputs.env }} svc-backend-api --timeout=120s
         
-    
+        #Verify Certificate status
+        kubectl describe certificate -n max-weather-${{ github.event.inputs.env }} app-tls-cert
 
         kubectl rollout status deployment/app-api -n max-weather-${{ github.event.inputs.env }} --timeout=300s ||\
         echo "Applying the manifest timeout"
@@ -142,6 +148,11 @@ jobs:
       - name: Run multiple shell commands
         run: |
           echo "Process TVT"
+          kubectl get ingress -n max-weather-${{ github.event.inputs.env }}
+          kubectl get networkpolicy -n max-weather-${{ github.event.inputs.env }}
+          kubectl logs -n ingress-nginx deploy/ingress-nginx-controller
+          kubectl logs -n <namespace> <pod-name>
+          curl -v -k https://prod-api.quyennv.com/v1/ping
           URL="https://${{ github.event.inputs.env }}-api.quyennv.com/v1/ping"
           MAX_RETRIES=5
           DELAY=2
@@ -151,7 +162,7 @@ jobs:
           while (( attempt < MAX_RETRIES )); do
               echo "Attempt $((attempt + 1)) to test URL: $URL"
               # Perform the curl request
-              curl --fail --silent --show-error "$URL" && {
+              curl -v -k --fail --silent --show-error "$URL" && {
                   echo "URL responded successfully."
                   exit 0
               }
