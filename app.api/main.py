@@ -78,6 +78,27 @@ def login():
     if user_verify_result.get('code') == 1:
         return  jsonify(Data=user_verify_result),401
     return jsonify(Data=user_verify_result),200
+    
+#magnify the health check for the app
+# class HealthStatus(BaseModel):
+#     status: str
+#     uptime_seconds: float
+
+# start_time = time.time()
+
+# @app.get("/health", response_model=HealthStatus)
+# async def health_check():
+#     """
+#     Returns:
+#       - status: "ok" if the app is running
+#       - uptime_seconds: seconds since the app started
+#     """
+#     uptime = time.time() - start_time
+#     return HealthStatus(status="ok", uptime_seconds=uptime)
+
+# @app.get("/")
+# async def read_root():
+#     return {"message": "Hello, world!"}
 
 @cross_origin
 @ app.route("/v1/resources", methods=["GET"])
@@ -87,4 +108,4 @@ def resources_weather():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8086, debug=False)
+    app.run(host='0.0.0.0', port=8086, reload=True, debug=False)
