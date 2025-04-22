@@ -38,7 +38,8 @@ jobs:
 
       - name: Verify alp on AWS
         run: |
-          aws ec2 describe-network-interfaces --network-interface-ids eni-0da59a2858ba2d178 --query 'NetworkInterfaces[].RequesterId' >> $GITHUB_OUTPUT
+          APL_QUERRY=( aws ec2 describe-network-interfaces --network-interface-ids eni-0da59a2858ba2d178 --query 'NetworkInterfaces[].RequesterId' ) 
+          echo "apl_querry=$APL_QUERRY" >> $GITHUB_OUTPUT
 
           OUTPUT=$( aws sts get-caller-identity --output text )
           echo "output=$OUTPUT" >> $GITHUB_OUTPUT
