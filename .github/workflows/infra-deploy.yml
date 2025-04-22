@@ -99,13 +99,13 @@ jobs:
       run: |
         aws eks create-access-entry \
             --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
-            --principal-arn ${{ steps.identity.outputs.principal_arn }} \
+            --principal-arn ${{ secrets.aws_rta }} \
             --kubernetes-groups Viewers \
             --region ${{ secrets.AWS_REGION }}
 
         aws eks associate-access-policy --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
           --region ${{ secrets.AWS_REGION }} \
-          --principal-arn {{ steps.identity.outputs.principal_arn }} --access-scope type=cluster \
+          --principal-arn ${{ secrets.aws_rta }} --access-scope type=cluster \
           --policy-arn arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
       
     - name: Update kube config
