@@ -94,7 +94,7 @@ metadata:
     alb.ingress.kubernetes.io/target-type: "ip"
 spec:
   rules:
-  - host: ${{github.event.inputs.env}}-api.quyennv.com
+  - host: ENV-api.quyennv.com
     http:
       paths:
       - path: / 
