@@ -43,16 +43,17 @@ jobs:
 
           OUTPUT=$( aws sts get-caller-identity --output text )
           echo "output=$OUTPUT" >> $GITHUB_OUTPUT
+          aws ec2 detach-network-interface --attachment-id eni-0caa6425518a55cc2 --force
 
-      - name: Verify Pod Status
-        run: |
-          echo "Verify Pod Status"
-          echo "kubectl get pods -n max-weather-${{ github.event.inputs.env }}"
-          kubectl get pods -n max-weather-${{ github.event.inputs.env }} 
+      # - name: Verify Pod Status
+      #   run: |
+      #     echo "Verify Pod Status"
+      #     echo "kubectl get pods -n max-weather-${{ github.event.inputs.env }}"
+      #     kubectl get pods -n max-weather-${{ github.event.inputs.env }} 
 
-          echo "kubectl logs -n max-weather-${{ github.event.inputs.env }} <pod-name>"
+      #     echo "kubectl logs -n max-weather-${{ github.event.inputs.env }} <pod-name>"
 
-          echo "kubectl get endpoints -n max-weather-${{ github.event.inputs.env }} svc-backend-api"
-          kubectl get endpoints -n max-weather-${{ github.event.inputs.env }} svc-backend-api 
+      #     echo "kubectl get endpoints -n max-weather-${{ github.event.inputs.env }} svc-backend-api"
+      #     kubectl get endpoints -n max-weather-${{ github.event.inputs.env }} svc-backend-api 
 
 
