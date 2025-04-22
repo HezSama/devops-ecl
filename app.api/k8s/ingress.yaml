@@ -13,9 +13,9 @@ metadata:
     external-dns.alpha.kubernetes.io/hostname: dev-api.quyennv.com
     external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
 
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"     # use OriginIssuer or letsencrypt-prod yes/no
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"     
  
-    alb.ingress.kubernetes.io/scheme: "internet-facing"    # use alb ingress or nginx ingress yes/no
+    alb.ingress.kubernetes.io/scheme: "internet-facing"    
     alb.ingress.kubernetes.io/target-type: "ip"
 
 
