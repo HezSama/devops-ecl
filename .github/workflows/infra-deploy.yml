@@ -85,14 +85,14 @@ jobs:
         role-to-assume: ${{ secrets.aws_rta }}
         aws-region: ${{ secrets.AWS_REGION }}
         role-session-name: cuongnvecl-github-svc-tf-provision-infra
-    - name: Get AWS user identity
-      id: identity
-      run: |
-        PRINCIPAL_ARN=$(aws sts get-caller-identity --query Arn --output text)
-        echo "principal_arn=$PRINCIPAL_ARN" >> $GITHUB_OUTPUT
-        echo "principal_arn=$PRINCIPAL_ARN" >> arn-output.txt
-        TYPE_ACCESS=cluster
-        POLICY_ARN=arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
+    # - name: Get AWS user identity
+    #   id: identity
+    #   run: |
+    #     PRINCIPAL_ARN=$(aws sts get-caller-identity --query Arn --output text)
+    #     echo "principal_arn=$PRINCIPAL_ARN" >> $GITHUB_OUTPUT
+    #     echo "principal_arn=$PRINCIPAL_ARN" >> arn-output.txt
+    #     TYPE_ACCESS=cluster
+    #     POLICY_ARN=arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
 
 
     - name: Grant access  
