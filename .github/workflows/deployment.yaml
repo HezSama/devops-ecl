@@ -101,13 +101,13 @@ jobs:
 
     - name: Create docker secrets for private repo
       run: |
-          kubectl create secret docker-registry app-api-ecl-vblue1594 \
+          kubectl create secret docker-registry app-api-ecl-${{ github.event.inputs.env }} \
             --docker-server=https://index.docker.io/v1/ \
             --docker-username=${{ secrets.DOCKERHUB_USERNAME }} \
             --docker-password=${{ secrets.DOCKERHUB_TOKEN }} \
             --docker-email=${{ secrets.DOCKERHUB_EMAIL }} \
             -n max-weather-${{ github.event.inputs.env }} || echo "Secret already exists"
-            
+
     - name: Apply Kubernetes manifest
       run: |
         sed -i "s|ENV|${{ github.event.inputs.env }}|g" app.api/k8s/deployment.yaml
