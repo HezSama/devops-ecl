@@ -1,0 +1,67 @@
+name: Pod-Status-Verify
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Pod status verify'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - staging
+          - prod
+env:
+  ENV: ${{ github.event.inputs.env }}
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  verify:
+    name: Verify Environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.aws_rta }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: cuongnvecl-github-svc-tf-provision-infra
+
+      - name: Update kube config
+        run: aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}  
+
+      - name: Verify Testing
+        run: |
+            echo "Process TVT"
+            URL="https://${{ github.event.inputs.env }}-api.quyennv.com/v1/ping"
+            MAX_RETRIES=5
+            DELAY=2
+            attempt=0
+            sleep 10
+            # Function to perform curl and handle retries
+            while (( attempt < MAX_RETRIES )); do
+                echo "Attempt $((attempt + 1)) to test URL: $URL"
+                # Perform the curl request
+                curl --fail --silent --show-error "$URL" && {
+                    echo "URL responded successfully."
+                    exit 0
+                }
+                ((attempt++))
+                if (( attempt < MAX_RETRIES )); then
+                    echo "Retrying in $DELAY seconds..."
+                    sleep $DELAY
+                fi
+            done
+
+              # If all attempts fail, throw an error
+              echo "Error: URL test failed after $MAX_RETRIES attempts."
+              exit 1
+
