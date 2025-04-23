@@ -148,11 +148,7 @@ jobs:
       - name: Run multiple shell commands
         run: |
           echo "Process TVT"
-          kubectl get ingress -n max-weather-${{ github.event.inputs.env }}
-          kubectl get networkpolicy -n max-weather-${{ github.event.inputs.env }}
-          kubectl logs -n ingress-nginx deploy/ingress-nginx-controller
-          kubectl logs -n <namespace> <pod-name>
-          curl -v -k https://prod-api.quyennv.com/v1/ping
+
           URL="https://${{ github.event.inputs.env }}-api.quyennv.com/v1/ping"
           MAX_RETRIES=5
           DELAY=2
@@ -162,7 +158,7 @@ jobs:
           while (( attempt < MAX_RETRIES )); do
               echo "Attempt $((attempt + 1)) to test URL: $URL"
               # Perform the curl request
-              curl -v -k --fail --silent --show-error "$URL" && {
+              curl --fail --silent --show-error "$URL" && {
                   echo "URL responded successfully."
                   exit 0
               }
