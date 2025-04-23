@@ -36,21 +36,14 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           role-session-name: cuongnvecl-github-svc-tf-provision-infra  
 
-      - name: Verify alp on AWS
+      - name: Update kube config
+        run: aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+
+      - name: Showing the results
         run: |
           kubectl get pods -A
           kubectl get pods -n max-weather-${{ github.event.inputs.env }}
           
 
-      # - name: Verify Pod Status
-      #   run: |
-      #     echo "Verify Pod Status"
-      #     echo "kubectl get pods -n max-weather-${{ github.event.inputs.env }}"
-      #     kubectl get pods -n max-weather-${{ github.event.inputs.env }} 
-
-      #     echo "kubectl logs -n max-weather-${{ github.event.inputs.env }} <pod-name>"
-
-      #     echo "kubectl get endpoints -n max-weather-${{ github.event.inputs.env }} svc-backend-api"
-      #     kubectl get endpoints -n max-weather-${{ github.event.inputs.env }} svc-backend-api 
 
 
