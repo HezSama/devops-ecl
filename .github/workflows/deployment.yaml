@@ -67,7 +67,11 @@ jobs:
     
     - name: Grant access  
       run: |
-        aws eks create-access-entry \
+        aws eks describe-access-entry \
+        --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
+        --principal-arn ${{ secrets.aws_rta }} \
+        --region ${{ secrets.AWS_REGION }} ||\
+          aws eks create-access-entry \
             --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
             --principal-arn ${{ secrets.aws_rta }} \
             --kubernetes-groups Viewers \
