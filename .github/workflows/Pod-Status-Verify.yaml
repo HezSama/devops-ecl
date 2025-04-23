@@ -38,6 +38,11 @@ jobs:
       - name: Update kube config
         run: aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}  
 
+      - name: destroy staging pod
+        run: |
+          sed -i "s|ENV|${{ github.event.inputs.env }}|g" app.api/k8s/deployment.yaml
+          kubectl delete -f app.api/k8s/deployment.yaml --timeout=120s
+
       - name: Verify Testing
         run: |
             echo "Process TVT"
