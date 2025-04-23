@@ -28,7 +28,7 @@ COPY --chown=appuser:appgroup . .
 
 # Change ownership and permissions
 # PermissionError: [Errno 13] Permission denied: './logs' -> adding permission to logs.
-RUN chmod -R 755 /app && chmod -R 777 /app  
+RUN chmod -R 755 /app && chmod -R 777 /app/logs
 
 # Switch to non-root user
 USER appuser
