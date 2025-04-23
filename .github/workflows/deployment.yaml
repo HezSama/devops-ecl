@@ -137,7 +137,7 @@ jobs:
         sed -i "s|ENV|${{ github.event.inputs.env }}|g" app.api/k8s/services.yaml
         sed -i "s|ENV|${{ github.event.inputs.env }}|g" app.api/k8s/ingress.yaml
         
-        sed -i "s|CONTAINER_REGISTRY_BASE_URI|vblue1594/max-weather:${{ github.sha }}|g" app.api/k8s/deployment.yaml
+        sed -i "s|CONTAINER_REGISTRY_BASE_URI|vblue1594/max-weather1:${{ github.sha }}|g" app.api/k8s/deployment.yaml
 
         kubectl apply -f app.api/k8s/deployment.yaml --timeout=120s
         kubectl apply -f app.api/k8s/certificate.yaml --timeout=120s
