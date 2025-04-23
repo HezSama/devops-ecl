@@ -10,7 +10,7 @@ metadata:
     cert-manager.io/issuer: prod-issuer
     cert-manager.io/issuer-kind: OriginIssuer
     cert-manager.io/issuer-group: cert-manager.k8s.cloudflare.com
-    external-dns.alpha.kubernetes.io/hostname: dev-api.quyennv.com
+    external-dns.alpha.kubernetes.io/hostname: ENV-api.quyennv.com
     external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
 
     cert-manager.io/cluster-issuer: "letsencrypt-prod"     
