@@ -149,7 +149,7 @@ jobs:
         run: |
           echo "Process TVT"
 
-          URL="https://${{ github.event.inputs.env }}-api.quyennv.com/v1/ping"
+          URL="https://https://dev-api.odoo.id.vn/v1/ping"
           MAX_RETRIES=5
           DELAY=2
           attempt=0
