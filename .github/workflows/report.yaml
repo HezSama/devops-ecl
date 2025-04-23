@@ -1,16 +1,15 @@
-name: Results
+name: Reports
 
 on:
   workflow_dispatch:
     inputs:
       env:
-        description: 'Run to show the results'
+        description: 'Run to export the reports'
         required: true
-        default: 'dev'
+        default: 'reports'
         type: choice
         options:
-          - dev
-          - prod
+          - reports
 
 env:
   ENV: ${{ github.event.inputs.env }}
@@ -44,8 +43,14 @@ jobs:
           echo "kubectl get pods -A"
           kubectl get pods -A
           echo " "
-          echo "kubectl get pods -n max-weather-${{ github.event.inputs.env }}"
-          kubectl get pods -n max-weather-${{ github.event.inputs.env }}
+          echo "kubectl get pods -n max-weather-dev"
+          kubectl get pods -n dev
+          echo " "
+          echo "kubectl get pods -n max-weather-staging"
+          kubectl get pods -n max-weather-staging
+                    echo " "
+          echo "kubectl get pods -n max-weather-prod"
+          kubectl get pods -n max-weather-prod
           echo " "
           echo "kubectl get namespace "
           kubectl get namespace 
