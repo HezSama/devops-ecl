@@ -32,7 +32,7 @@ COPY --chown=appuser:appgroup . .
 RUN mkdir -p /app/logs/info /app/logs/error /app/logs/debug /app/logs/warning
 
 # Change ownership and permissions
-RUN chmod -R 755 /app && chmod -R 777 /app/logs
+RUN chmod -R 755 /app && chmod -R 777 /app/logs && chown -R appuser:appgroup /app/logs
 
 # Switch to non-root user
 USER appuser
