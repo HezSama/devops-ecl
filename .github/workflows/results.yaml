@@ -41,13 +41,13 @@ jobs:
 
       - name: Showing the results
         run: |
-          echo "kubectl get pods -A"
+          echo "\nkubectl get pods -A"
           kubectl get pods -A
 
-          echo "kubectl get pods -n max-weather-${{ github.event.inputs.env }}"
+          echo "\nkubectl get pods -n max-weather-${{ github.event.inputs.env }}"
           kubectl get pods -n max-weather-${{ github.event.inputs.env }}
 
-          echo "kubectl get namespace -n max-weather-${{ github.event.inputs.env }}"
+          echo "\nkubectl get namespace -n max-weather-${{ github.event.inputs.env }}"
           kubectl get namespace -n max-weather-${{ github.event.inputs.env }}
           
 
