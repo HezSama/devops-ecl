@@ -44,7 +44,7 @@ jobs:
           kubectl get pods -A
           echo " "
           echo "kubectl get pods -n max-weather-dev"
-          kubectl get pods -n dev
+          kubectl get pods -n max-weather-dev
           echo " "
           echo "kubectl get pods -n max-weather-staging"
           kubectl get pods -n max-weather-staging
