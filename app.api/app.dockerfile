@@ -27,7 +27,7 @@ RUN pip3 install --no-cache-dir --requirement requirements.txt
 COPY --chown=appuser:appgroup . .
 
 # Change ownership and permissions
-RUN chmod -R 755 /app
+RUN chmod -R 755 /app && chmod -R 777 /app/logs
 
 # Switch to non-root user
 USER appuser
