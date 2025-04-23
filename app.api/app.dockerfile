@@ -11,11 +11,9 @@ ENV PYTHONUNBUFFERED=1 \
 RUN groupadd --system appgroup && useradd --system --create-home --gid appgroup appuser
 
 # Update, install dependencies, then clean up to reduce image size
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    install -y curl \
+RUN apt-get update && apt-get install -y curl && apt-get install -y bind-utils && apt-get install -y --no-install-recommends  \
     libpq-dev \
-    gcc \
-    install -y bind-utils \
+    gcc \    
     && apt-get clean && rm -rf /var/lib/apt/lists/* 
 
 # Set working directory
