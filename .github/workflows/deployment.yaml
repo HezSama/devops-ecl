@@ -4,12 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       env:
-        description: 'Deploy app to EKS'
+        description: 'Deploy app to EKS environment'
         required: true
         default: 'dev'
         type: choice
         options:
           - dev
+          - staging
           - prod
 
 env:
@@ -64,6 +65,19 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}
         role-session-name: cuongnvecl-github-svc-tf-provision-infra
     
+    - name: Grant access  
+      run: |
+        aws eks create-access-entry \
+            --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
+            --principal-arn ${{ secrets.aws_rta }} \
+            --kubernetes-groups Viewers \
+            --region ${{ secrets.AWS_REGION }}
+
+        aws eks associate-access-policy --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
+          --region ${{ secrets.AWS_REGION }} \
+          --principal-arn ${{ secrets.aws_rta }} --access-scope type=cluster \
+          --policy-arn arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
+
     - name: Update kube config
       run: aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
 
@@ -71,6 +85,10 @@ jobs:
       run: |
         kubectl get ns max-weather-${{ github.event.inputs.env }} ||\
          kubectl create ns max-weather-${{ github.event.inputs.env }}
+        
+        echo "Verifying the eks cluster"
+        kubectl config current-context | grep $EKS_CLUSTER_NAME  | wc -l
+        kubectl get namespace -A
 
     - name: install cert-manager
       run: |

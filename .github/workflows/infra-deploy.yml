@@ -5,11 +5,10 @@ on:
       env:
         description: 'Environment to deploy to'
         required: true
-        default: 'dev'
+        default: 'eclinfra'
         type: choice
         options:
-          - dev
-          - prod
+          - eclinfra
     
 env:
   ENV: ${{ github.event.inputs.env }}
@@ -65,56 +64,9 @@ jobs:
         run: |
           terraform apply -auto-approve --var-file=envs/${{ github.event.inputs.env }}.tfvars
 
-  init-kubeconfig:
-    name: Init kubeconfig
-    needs: terraform
-    runs-on: ubuntu-latest
-
-    env:
-      ENV: ${{ github.event.inputs.env }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
-
-    steps: 
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        role-to-assume: ${{ secrets.aws_rta }}
-        aws-region: ${{ secrets.AWS_REGION }}
-        role-session-name: cuongnvecl-github-svc-tf-provision-infra
-    # - name: Get AWS user identity
-    #   id: identity
-    #   run: |
-    #     PRINCIPAL_ARN=$(aws sts get-caller-identity --query Arn --output text)
-    #     echo "principal_arn=$PRINCIPAL_ARN" >> $GITHUB_OUTPUT
-    #     echo "principal_arn=$PRINCIPAL_ARN" >> arn-output.txt
-    #     TYPE_ACCESS=cluster
-    #     POLICY_ARN=arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
+  
 
 
-    - name: Grant access  
-      run: |
-        aws eks create-access-entry \
-            --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
-            --principal-arn ${{ secrets.aws_rta }} \
-            --kubernetes-groups Viewers \
-            --region ${{ secrets.AWS_REGION }}
-
-        aws eks associate-access-policy --cluster-name ${{ secrets.EKS_CLUSTER_NAME }} \
-          --region ${{ secrets.AWS_REGION }} \
-          --principal-arn ${{ secrets.aws_rta }} --access-scope type=cluster \
-          --policy-arn arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
-      
-    - name: Update kube config
-      run: |
-        aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME }}
-
-        echo "Verifying the eks cluster"
-        kubectl config current-context | grep $EKS_CLUSTER_NAME  | wc -l
-        kubectl get namespace -A
 
 
 

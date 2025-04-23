@@ -6,11 +6,10 @@ on:
       env:
         description: 'Environment to destroy to'
         required: true
-        default: 'dev'
+        default: 'eclinfra'
         type: choice
         options:
-          - dev
-          - prod
+          - eclinfra
       confirmation:
         description: 'Type "Confirm" to destroy all the terraform infrastructure resources'
         required: true 
