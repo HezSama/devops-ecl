@@ -48,7 +48,7 @@ jobs:
       
     - name: Push Docker image to Docker hub
       run: |
-        docker push vblue1594/max-weather:${{ github.sha }}
+        docker push vblue1594/max-weather1:${{ github.sha }}
 
   deploy:
     needs: build
