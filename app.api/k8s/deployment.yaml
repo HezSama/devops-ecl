@@ -31,7 +31,7 @@ spec:
                       - backend-api
               topologyKey: kubernetes.io/hostname
       imagePullSecrets:
-        - name: app-api-ecl-ENV
+        - name: app-api-ecl1-ENV
       containers:
         - name: backend-api
           image: CONTAINER_REGISTRY_BASE_URI
