@@ -12,9 +12,11 @@ RUN groupadd --system appgroup && useradd --system --create-home --gid appgroup 
 
 # Update, install dependencies, then clean up to reduce image size
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    install -y curl \
     libpq-dev \
     gcc \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    install -y bind-utils \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* 
 
 # Set working directory
 WORKDIR /app
