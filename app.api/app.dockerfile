@@ -27,7 +27,8 @@ RUN pip3 install --no-cache-dir --requirement requirements.txt
 COPY --chown=appuser:appgroup . .
 
 # Change ownership and permissions
-RUN chmod -R 755 /app && chmod -R 777 /app/logs
+# PermissionError: [Errno 13] Permission denied: './logs' -> adding permission to logs.
+RUN chmod -R 755 /app && chmod -R 777 /app  
 
 # Switch to non-root user
 USER appuser
