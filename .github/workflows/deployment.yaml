@@ -146,7 +146,7 @@ jobs:
 
         kubectl create secret generic \
         --dry-run \
-        -n default service-key \
+        -n max-weather-${{ github.event.inputs.env }} service-key \
         --from-literal key=v1.0-FFFFFFF-FFFFFFFF -o yaml
         kubectl apply -f app.api/k8s/issuer.yaml --timeout=120s
 
