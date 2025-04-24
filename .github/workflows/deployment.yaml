@@ -143,6 +143,11 @@ jobs:
         kubectl apply -f app.api/k8s/certificate.yaml --timeout=120s
         kubectl apply -f app.api/k8s/services.yaml --timeout=120s
         kubectl apply -f app.api/k8s/ingress.yaml --timeout=120s
+
+        kubectl create secret generic \
+        --dry-run \
+        -n default service-key \
+        --from-literal key=v1.0-FFFFFFF-FFFFFFFF -o yaml
         kubectl apply -f app.api/k8s/issuer.yaml --timeout=120s
 
         echo "Verify Pod Status"
