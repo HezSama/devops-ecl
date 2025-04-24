@@ -150,7 +150,7 @@ jobs:
         --from-literal key=v1.0-FFFFFFF-FFFFFFFF -o yaml
 
         sed -i "s|ENV|${{ github.event.inputs.env }}|g" app.api/k8s/issuer.yaml
-        kubectl apply -f app.api/k8s/issuer.yaml --timeout=120s
+        kubectl apply -f app.api/k8s/Issuer.yaml --timeout=120s
 
         echo "Verify Pod Status"
         echo "kubectl get pods -n max-weather-${{ github.event.inputs.env }}"
