@@ -8,4 +8,4 @@ spec:
   auth:
     serviceKeyRef:
       name: service-key
-      key: key
+      key: key-repushfile
