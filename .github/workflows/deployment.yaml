@@ -146,8 +146,10 @@ jobs:
 
         kubectl create secret generic \
         --dry-run \
-        -n max-weather-${{ github.event.inputs.env }} service-key \
+        -n default service-key \
         --from-literal key=v1.0-FFFFFFF-FFFFFFFF -o yaml
+
+        sed -i "s|ENV|${{ github.event.inputs.env }}|g" app.api/k8s/issuer.yaml
         kubectl apply -f app.api/k8s/issuer.yaml --timeout=120s
 
         echo "Verify Pod Status"
