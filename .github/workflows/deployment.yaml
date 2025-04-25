@@ -170,7 +170,7 @@ jobs:
       - name: Run multiple shell commands
         run: |
           echo "Process TVT"
-          URL="https://${{ github.event.inputs.env }}-api-cuongnvecl.duckdns.org/v1/ping"
+          URL="http://${{ github.event.inputs.env }}-api-cuongnvecl.duckdns.org/v1/ping"
           MAX_RETRIES=5
           DELAY=2
           attempt=0
