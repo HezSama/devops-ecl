@@ -144,14 +144,6 @@ jobs:
         kubectl apply -f app.api/k8s/services.yaml --timeout=120s
         kubectl apply -f app.api/k8s/ingress.yaml --timeout=120s
 
-        kubectl create secret generic \
-        --dry-run \
-        -n default service-key \
-        --from-literal key=v1.0-FFFFFFF-FFFFFFFF -o yaml
-
-        sed -i "s|ENV|${{ github.event.inputs.env }}|g" app.api/k8s/issuer2.yaml
-        kubectl apply -f app.api/k8s/issuer2.yaml --timeout=120s
-
         echo "Verify Pod Status"
         echo "kubectl get pods -n max-weather-${{ github.event.inputs.env }}"
         kubectl get pods -n max-weather-${{ github.event.inputs.env }} 
