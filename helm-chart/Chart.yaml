@@ -1,4 +1,4 @@
 apiVersion: v2
 description: A Helm chart for deploying the Max Weather app
-name: application
+name: max-weather-helm
 version: 0.1.0
