@@ -175,6 +175,7 @@ jobs:
           DELAY=2
           attempt=0
           sleep 10
+          curl "$URL"
           # Function to perform curl and handle retries
           while (( attempt < MAX_RETRIES )); do
               echo "Attempt $((attempt + 1)) to test URL: $URL"
