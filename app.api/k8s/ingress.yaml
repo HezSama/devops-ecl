@@ -33,5 +33,5 @@ spec:
               number: 80 
   tls:
   - hosts:
-    - ENV-api-api.quyennv.com
+    - ENV-api.quyennv.com
     secretName: app-tls
