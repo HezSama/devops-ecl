@@ -40,8 +40,8 @@ jobs:
 
       - name: Showing the results
         run: |
-          echo "kubectl get pods -A"
-          kubectl get pods -A
+          echo "kubectl get pods -A -o wide"
+          kubectl get pods -A -o wide
           echo " "
           echo "kubectl get pods -n max-weather-dev"
           kubectl get pods -n max-weather-dev
@@ -54,6 +54,7 @@ jobs:
           echo " "
           echo "kubectl get namespace "
           kubectl get namespace 
+
           
 
 
