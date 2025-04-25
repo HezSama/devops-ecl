@@ -6,7 +6,7 @@ metadata:
 spec:
   secretName: app-tls
   dnsNames:
-    - ENV-api.quyennv.com
+    - ENV-api-cuongnvecl.duckdns.org
   duration: 8760h
   renewBefore: 24h
   issuerRef:

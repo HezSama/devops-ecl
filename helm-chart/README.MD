@@ -1,0 +1,1 @@
+helm pull oci://registry-1.docker.io/quyencl91/application

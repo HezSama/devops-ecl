@@ -54,7 +54,7 @@ metadata:
 spec:
   secretName: app-tls
   dnsNames:
-    - ENV-api.quyennv.com
+    - ENV-api-cuongnvecl.duckdns.org
   duration: 8760h
   renewBefore: 24h
   issuerRef:
@@ -87,14 +87,14 @@ metadata:
     cert-manager.io/issuer: prod-issuer
     cert-manager.io/issuer-kind: OriginIssuer
     cert-manager.io/issuer-group: cert-manager.k8s.cloudflare.com
-    external-dns.alpha.kubernetes.io/hostname: dev-api.quyennv.com
+    external-dns.alpha.kubernetes.io/hostname: ENV-api-cuongnvecl.duckdns.org
     external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     alb.ingress.kubernetes.io/scheme: "internet-facing"
     alb.ingress.kubernetes.io/target-type: "ip"
 spec:
   rules:
-  - host: ENV-api.quyennv.com
+  - host: ENV-api-cuongnvecl.duckdns.org
     http:
       paths:
       - path: / 
@@ -106,6 +106,6 @@ spec:
               number: 80 
   tls:
   - hosts:
-    - ENV-api.quyennv.com
+    - ENV-api-cuongnvecl.duckdns.org
     secretName: app-tls
 
